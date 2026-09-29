@@ -6,7 +6,7 @@ WebGPU runs four workgroups in parallel. Each workgroup evolves one chain and di
 
 ## Run
 
-Serve this directory over localhost or HTTPS and open index.html. The compiled core.wasm is included. Click Run simulation, drag to rotate, scroll to zoom, or double-click to reset the camera. Execution pauses when the page is hidden.
+Serve this directory over localhost or HTTPS and open index.html. The compiled core.wasm is included. Click Run simulation, drag to rotate, or double-click to reset the camera. The folds are automatically framed; scrolling moves the page without zooming. Execution pauses when the page is hidden.
 
 ## Build and test
 
