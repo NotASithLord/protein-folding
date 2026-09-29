@@ -14,3 +14,4 @@ for(let i=1;i<28;i++){
  assert(Math.abs(length(before)-length(after))<1e-8,'Bond length must be conserved');
 }
 console.log('Folding:',initial,'→',c.fold_best(),'/ 12,000 proposals; bond lengths conserved');
+assert(Math.abs(c.fold_score()-c.fold_energy())<1e-10,'Independent scoring must agree with the solver');

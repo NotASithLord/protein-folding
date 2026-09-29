@@ -52,3 +52,4 @@ func energy(_ p: UnsafeMutablePointer<Double>) -> Double {
 @_cdecl("fold_best") public func bestEnergy() -> Double { foldBest }
 @_cdecl("fold_steps") public func foldingSteps() -> Int32 { foldSteps }
 @_cdecl("fold_accepted") public func foldingAccepted() -> Int32 { foldAccepted }
+@_cdecl("fold_score") public func foldingScore() -> Double { energy(positions) }

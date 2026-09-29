@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+const scope={ProteinView:{Orbit:class {}}};scope.globalThis=scope;
+vm.runInNewContext(fs.readFileSync(new URL('Browser/folding-race.js',import.meta.url),'utf8'),scope);
+const r=new scope.ProteinRace();r.core={};r.phase='racing';let submissions=0;r.step=()=>submissions++;
+r.chains.forEach((c,i)=>c.best=[-50,-70,-60,-55][i]);
+r.advance(0,1);assert.equal(r.time,0);assert.equal(submissions,0);
+r.advance(29,1);assert.equal(r.phase,'racing');assert.equal(r.time,29);
+r.busy=true;r.advance(1,1);assert.equal(r.phase,'racing');assert.equal(r.time,30);assert.equal(submissions,1);
+r.busy=false;r.advance(.01,1);assert.equal(r.phase,'result');assert.equal(r.winner,1);assert.equal(r.wins[1],1);
+r.advance(0,1);assert.equal(r.hold,0);
+r.advance(3.9,1);assert.equal(r.phase,'result');r.resetRound=()=>{r.time=0;r.phase='racing';};r.advance(.1,1);assert.equal(r.round,2);assert.equal(r.time,0);
+console.log('30-second cutoff, in-flight drain, lowest-energy winner, pause and restart: passed');

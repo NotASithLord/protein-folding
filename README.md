@@ -1,6 +1,8 @@
 # Protein Folding
 
-An interactive 3D protein-folding example, built in Embedded Swift and compiled to WebAssembly. A 28-residue hydrophobic/polar chain uses Metropolis pivot moves to conserve bond lengths, penalize collisions, and favor hydrophobic contacts. The view shows the actual solver coordinates.
+Four interactive 3D protein-folding searches compete in fixed 30-second rounds. Each starts with the same 28-residue hydrophobic/polar chain and uses an independent random sequence. The lowest best energy wins; the best conformations are held for four seconds before the next round. Scores persist across rounds. Pausing or hiding the page pauses the round clock.
+
+WebGPU runs four workgroups in parallel. Each workgroup evolves one chain and distributes its 351 nonbonded pair-energy evaluations across 64 lanes, reducing the result before accepting or rejecting each Metropolis pivot. Current and best conformations remain on the GPU. Embedded Swift, compiled to WebAssembly, initializes the chains and independently scores the saved best conformations before choosing the winner. GPU kernels use WGSL; JavaScript manages browser APIs and the rotatable view. WebGPU is required for the four-way race. The original Swift CPU solver remains available for numerical tests.
 
 ## Run
 
@@ -15,8 +17,9 @@ export SWIFT_BIN=/path/to/swift-toolchain/usr/bin
 export WASI_SYSROOT=/path/to/swift-wasm-sdk/wasm32-unknown-wasip1/WASI.sdk
 node build.mjs
 node test.mjs
+node test-rounds.mjs
 ```
 
-Tests verify energy reduction and bond-length conservation.
+Tests verify energy reduction, bond-length conservation, round cutoff, waiting for pending GPU work, lowest-energy winner selection, pause semantics, and round restart.
 
 Bundled dependency licenses are in THIRD_PARTY_NOTICES.md.
